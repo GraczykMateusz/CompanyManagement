@@ -7,57 +7,55 @@ import tkinter as tk
 class SubPage(Page):
 
     def __init__(self):
-        pass
 
-    company_list = []
-    employee_list = []
+        self.window_add_company = None
+        self.window_delete_company = None
+        self.window_find_company = None
+        self.window_list_company = None
+
+        self.window_add_employee = None
+        self.window_delete_employee = None
+        self.window_find_employee = None
+        self.window_list_employee = None
+    
+        self.company_list = []
+        self.employee_list = []
 
     def add_company(self):
-        self.top = tk.Toplevel()
-        self._set_sub_window("600x400")
-        self._add_sub_background("../Pictures/Background/raw_background.png")
+        self.window_add_company = self.check_window_existence(self.window_add_company)
+
+        SubPage._set_sub_window(self.window_add_company, "1175x775")
+        SubPage._add_sub_background(self.window_add_company, "../Pictures/Background/employee_background_tip.png")
         
-    @classmethod
-    def delete_company(cls):
+    def delete_company(self):
         print('TEST 2')
-        pass
     
-    @classmethod
-    def list_company(cls):
+    def list_company(self):
         print('TEST 3')
-        pass
 
-    @classmethod
-    def find_company(cls):
+    def find_company(self):
         print('TEST 4')
-        pass
 
-    @classmethod
-    def add_employee(cls):
+    def add_employee(self):
         print('TEST 5')
-        pass
     
-    @classmethod
-    def delete_employee(cls):
+    def delete_employee(self):
         print('TEST 6')
-        pass
 
-    @classmethod
-    def list_employee(cls):
+    def list_employee(self):
         print('TEST 7')
-        pass
 
-    @classmethod
-    def find_employee(cls):
+    def find_employee(self):
         print('TEST 8')
-        pass
 
-    @staticmethod
-    def send_database():
+    def send_database(self):
         print('TEST 9')
-        pass
 
-    @staticmethod
-    def download_database():
+    def download_database(self):
         print('TEST 10')
-        pass
+
+    def check_window_existence(self, top):
+        if top is not None:
+            top.destroy()
+        top = tk.Toplevel()
+        return top
