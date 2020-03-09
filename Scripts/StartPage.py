@@ -43,4 +43,17 @@ class StartPage(tk.Tk, Page):
         self.__database_button.place(x = position_x, y = position_y)
         self.__database_buttons_counter += 1
 
+    def radio_tip_button(self):
+        self.__tip = tk.BooleanVar()
+        self.__tip.set("True")
+        
+        self.__tip_button_on = tk.Radiobutton(self, width="4", bd=0, text="ON ", bg='grey', variable=self.__tip, value=True, command = lambda: self.refresh_tip(self.__tip.get()))
+        self.__tip_button_off = tk.Radiobutton(self, width="4", bd=0, text="OFF", bg='grey', variable=self.__tip, value=False, command = lambda: self.refresh_tip(self.__tip.get()))
+        
+        self.__tip_button_on.place(x=1105, y=710)
+        self.__tip_button_off.place(x=1105, y=731)
+
+    def refresh_tip(self, tip):
+        print(tip)
+
 
