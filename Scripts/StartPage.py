@@ -3,13 +3,15 @@ from Page import Page
 
 class StartPage(tk.Tk, Page):
     
+    tip = None 
+
     def __init__(self, geometry="1200x800", background="../Pictures/Background/background.png", icon="../Pictures/Icons/icon.png"):
         tk.Tk.__init__(self)
 
         self._set_window(geometry)
         self._add_background(background)
         self._add_window_icon(icon)
-
+    
         self.__employee_button_images_list = []
         self.__employee_buttons_counter=0
 
@@ -44,16 +46,13 @@ class StartPage(tk.Tk, Page):
         self.__database_buttons_counter += 1
 
     def radio_tip_button(self):
-        self.__tip = tk.BooleanVar()
-        self.__tip.set("True")
+        StartPage.tip = tk.BooleanVar() 
+        StartPage.tip.set("True")
         
-        self.__tip_button_on = tk.Radiobutton(self, width="4", bd=0, text="ON ", bg='grey', variable=self.__tip, value=True, command = lambda: self.refresh_tip(self.__tip.get()))
-        self.__tip_button_off = tk.Radiobutton(self, width="4", bd=0, text="OFF", bg='grey', variable=self.__tip, value=False, command = lambda: self.refresh_tip(self.__tip.get()))
+        self.__tip_button_on = tk.Radiobutton(self, width="4", bd=0, text="ON ", bg='grey', variable=StartPage.tip, value=True)
+        self.__tip_button_off = tk.Radiobutton(self, width="4", bd=0, text="OFF", bg='grey', variable=StartPage.tip, value=False)
         
         self.__tip_button_on.place(x=1105, y=710)
         self.__tip_button_off.place(x=1105, y=731)
-
-    def refresh_tip(self, tip):
-        print(tip)
 
 
