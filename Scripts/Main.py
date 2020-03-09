@@ -19,4 +19,6 @@ if __name__ == "__main__":
     window.add_database_button("../Pictures/Buttons/database_download_button.png", 490, sub_window.download_database)
     window.add_database_button("../Pictures/Buttons/database_send_button.png", 550, sub_window.send_database)
 
+    window.radio_tip_button()
+
     window.mainloop()
