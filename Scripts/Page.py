@@ -15,5 +15,5 @@ class Page:
     def _add_window_icon(self, path_to_image):
         self.iconphoto(True, tk.PhotoImage(file = path_to_image))
 
-    def mainloop(self):
+    def _mainloop(self):
         self.mainloop()
