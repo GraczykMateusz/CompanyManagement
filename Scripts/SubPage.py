@@ -1,7 +1,6 @@
 from Company import Company
 from Employee import Employee
 from Page import Page
-from StartPage import StartPage
 
 import tkinter as tk
 
@@ -26,9 +25,10 @@ class SubPage(Page):
         self.__entry_list = []
 
     def add_company(self):
+    
         self.__window_add_company = self.check_window_existence(self.__window_add_company)
-
-        if StartPage.tip.get() == True:
+    
+        if self.tip == True:
             self.window_config(self.__window_add_company, "../Pictures/Background/employee_add_background_tip.png", "../Pictures/Icons/company_add_image.png")
         else:
             self.window_config(self.__window_add_company, "../Pictures/Background/employee_add_background.png", "../Pictures/Icons/company_add_image.png")
@@ -69,8 +69,8 @@ class SubPage(Page):
     def download_database(self):
         print('TEST 10')
 
-    def check_window_tip(self):
-        pass
+    def check_window_tip(self, tip):
+        self.tip = tip
 
     def check_window_existence(self, top):
         if top is not None:
