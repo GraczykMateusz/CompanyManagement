@@ -7,20 +7,20 @@ class Company:
         self.__tax_id = tax_id
         self.__foundation_year = foundation_year
 
-        def get_founder_name():
-            return self.__founder_name
+    def get_founder_name(self):
+        return self.__founder_name
 
-        def get_founder_surname():
-            return self.__founder_surname
+    def get_founder_surname(self):
+        return self.__founder_surname
 
-        def get_company_name():
-            return self.__company_name
+    def get_company_name(self):
+        return self.__company_name
 
-        def get_company_address():
-            return self.__company_address
+    def get_company_address(self):
+        return self.__company_address
 
-        def get_tax_id():
-            return self.__tax_id
-        
-        def get_foundation_year():
-            return self.__foundation_year
+    def get_tax_id(self):
+        return self.__tax_id
+    
+    def get_foundation_year(self):
+        return self.__foundation_year
