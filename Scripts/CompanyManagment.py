@@ -14,17 +14,16 @@ class CompanyManagmet:
     @classmethod
     def __import_employees(cls):
         
-        temp = []
-        
         with open('../Data/EmployeesData.txt', 'r') as f:
+            
+            temp = []
+            
             for line in f:
                 line = line.strip()
                 temp.append(line)
-                print(line)
 
                 if line == '#':
                     for company in cls.companies_list:
-                        print("Company name: " + company.get_company_name())
                         if company.get_company_name() == temp[5]:
 
                             name = temp[0]
@@ -40,17 +39,20 @@ class CompanyManagmet:
                             employee = Employee(name, surname, personal_id, address, birthday, company_name, salary)
                             cls.employees_list.append(employee)
 
+                            break
+
+            temp.clear()
 
     @classmethod
     def __import_companies(cls):
         
-        temp = []
-        
         with open('../Data/CompaniesData.txt', 'r') as f:
+            
+            temp = []
+            
             for line in f:
                 line = line.strip()
                 temp.append(line)
-                print(line)
 
                 if line == '#':
                     founder_name = temp[0]
@@ -64,3 +66,5 @@ class CompanyManagmet:
 
                     company = Company(founder_name, founder_surname, company_name, company_address, tax_id, foundation_year)
                     cls.companies_list.append(company)
+
+            temp.clear()
