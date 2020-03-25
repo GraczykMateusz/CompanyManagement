@@ -1,7 +1,7 @@
 from Company import Company
 from Employee import Employee
 
-class CompanyManagmet:
+class CompanyManagment:
 
     companies_list = []
     employees_list = []
@@ -68,3 +68,17 @@ class CompanyManagmet:
                     cls.companies_list.append(company)
 
             temp.clear()
+
+    @classmethod
+    def check_employee_existance(cls, personal_id):
+        for employee in CompanyManagment.employees_list:
+            if employee.get_personal_id() == personal_id:
+                return True, employee
+        return False, None
+
+    @classmethod
+    def check_company_existance(cls, company_name):
+        for company in CompanyManagment.companies_list:
+            if company.get_company_name() == company_name:
+                return True, company
+        return False, None
