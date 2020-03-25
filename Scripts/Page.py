@@ -9,8 +9,8 @@ class Page:
 
     def _add_background(self, path_to_image):
         self.__background_image = tk.PhotoImage(file = path_to_image)
-        self.__background = tk.Label(self, image = self.__background_image)
-        self.__background.place(x=-1, y=-1)
+        self.__background = tk.Label(self, borderwidth=0, highlightthickness=0, image = self.__background_image)
+        self.__background.place(x=0, y=0)
 
     def _add_window_icon(self, path_to_image):
         self.iconphoto(True, tk.PhotoImage(file = path_to_image))
