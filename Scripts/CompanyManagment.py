@@ -77,8 +77,8 @@ class CompanyManagment:
         return False, None
 
     @classmethod
-    def check_company_existance(cls, company_name):
+    def check_company_existance(cls, tax_id):
         for company in CompanyManagment.companies_list:
-            if company.get_company_name() == company_name:
+            if company.get_tax_id() == tax_id:
                 return True, company
         return False, None
