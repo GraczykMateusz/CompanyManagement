@@ -95,6 +95,26 @@ class SubPage(Page):
     def view_find_company(self):
         self.__window_find_company = self.check_window_existence(self.__window_find_company)
 
+        self.window_config(self.__window_find_company, "../Pictures/Background/company_find_background.png", "../Pictures/Icons/company_find_image.png")
+
+        self.list_box_frame = tk.Frame(self.__window_find_company)
+        self.list_box_frame.place(relx=0.3, rely=0.6, anchor='center')
+        
+        self.list_box = tk.Listbox(self.list_box_frame, width=30, height=16, bg='black', fg='white', font = ('DejaVu Serif', 20, 'bold'))
+        self.list_box.pack(side="left", fill="y")
+
+        self.scrollbar = tk.Scrollbar(self.list_box_frame, orient="vertical")
+        self.scrollbar.config(command=self.list_box.yview)
+        self.scrollbar.pack(side="right", fill="y")
+
+        self.list_box.config(yscrollcommand=self.scrollbar.set)
+
+        self.tax_id = tk.Variable()
+
+        self.add_entry(self.__window_find_company, self.tax_id, 424, 840)
+
+        SubPage.submit_button(self.__window_find_company, self.submit_find_company)
+
     def view_add_employee(self):
         self.__window_add_employee = self.check_window_existence(self.__window_add_employee)
 
@@ -133,8 +153,8 @@ class SubPage(Page):
         self.personal_id = tk.Variable()
         self.company_tax_id = tk.Variable()
 
-        self.add_entry(self.__window_delete_employee, self.company_tax_id, 320)
-        self.add_entry(self.__window_delete_employee, self.personal_id, 405)
+        self.add_entry(self.__window_delete_employee, self.company_tax_id, 322)
+        self.add_entry(self.__window_delete_employee, self.personal_id, 406)
 
         SubPage.submit_button(self.__window_delete_employee, self.submit_delete_employee)
 
@@ -170,7 +190,30 @@ class SubPage(Page):
     def view_find_employee(self):
         self.__window_find_employee = self.check_window_existence(self.__window_find_employee)
 
-    def view_send_database(self):        
+        self.window_config(self.__window_find_employee, "../Pictures/Background/employee_find_background.png", "../Pictures/Icons/employee_find_image.png")
+
+        self.list_box_frame = tk.Frame(self.__window_find_employee)
+        self.list_box_frame.place(relx=0.3, rely=0.6, anchor='center')
+        
+        self.list_box = tk.Listbox(self.list_box_frame, width=30, height=16, bg='black', fg='white', font = ('DejaVu Serif', 20, 'bold'))
+        self.list_box.pack(side="left", fill="y")
+
+        self.scrollbar = tk.Scrollbar(self.list_box_frame, orient="vertical")
+        self.scrollbar.config(command=self.list_box.yview)
+        self.scrollbar.pack(side="right", fill="y")
+
+        self.list_box.config(yscrollcommand=self.scrollbar.set)
+
+        self.personal_id = tk.Variable()
+        self.company_tax_id = tk.Variable()
+
+        self.add_entry(self.__window_find_employee, self.personal_id, 310, 840)
+        self.add_entry(self.__window_find_employee, self.company_tax_id, 424, 840)
+
+        SubPage.submit_button(self.__window_find_employee, self.submit_find_employee)
+
+    def view_send_database(self): 
+        print(self.__entry_list)       
         print('TEST 9')
 
     def view_download_database(self):
@@ -182,6 +225,9 @@ class SubPage(Page):
     def check_window_existence(self, top):
         if top is not None:
             top.destroy()
+
+        self.__entry_list.clear()
+
         top = tk.Toplevel()
         return top
 
@@ -264,8 +310,6 @@ class SubPage(Page):
             
             self.__window_add_employee.after(3000, self.__failed.destroy)
         
-
-
     def submit_delete_employee(self):
         EMPTY = ''
         END_LINE_SYMBOL = '#'
@@ -435,3 +479,143 @@ class SubPage(Page):
             self.__failed.place(x=1038, y=695)
         
             self.__window_delete_company.after(3000, self.__failed.destroy)
+
+    def submit_find_employee(self):
+        EMPTY = ''
+        if self.personal_id.get() != EMPTY and self.company_tax_id.get() != EMPTY:
+            employee_exists, employee = CompanyManagment.check_employee_existance(self.personal_id.get(), self.company_tax_id.get())
+        
+            if employee_exists == True:
+
+                self.list_box_frame = tk.Frame(self.__window_find_employee)
+                self.list_box_frame.place(relx=0.3, rely=0.6, anchor='center')
+                
+                self.list_box = tk.Listbox(self.list_box_frame, width=30, height=16, bg='black', fg='white', font = ('DejaVu Serif', 20, 'bold'))
+                self.list_box.pack(side="left", fill="y")
+
+                self.list_box.insert(tk.END, "EMPLOYEE")
+                self.list_box.insert(tk.END, employee.get_name() + ' ' + employee.get_surname())
+                self.list_box.insert(tk.END, employee.get_personal_id())
+                self.list_box.insert(tk.END, employee.get_address())
+                self.list_box.insert(tk.END, employee.get_birthday())
+                self.list_box.insert(tk.END, employee.get_company_tax_id())
+                self.list_box.insert(tk.END, employee.get_salary())
+                self.list_box.insert(tk.END, '____________________________________________')
+            
+                self.scrollbar = tk.Scrollbar(self.list_box_frame, orient="vertical")
+                self.scrollbar.config(command=self.list_box.yview)
+                self.scrollbar.pack(side="right", fill="y")
+
+                self.list_box.config(yscrollcommand=self.scrollbar.set)
+
+                self.__success_image = tk.PhotoImage(file = '../Pictures/Icons/success.png')
+                self.__success = tk.Label(self.__window_find_employee, borderwidth=0, highlightthickness=0, image = self.__success_image)
+                self.__success.place(x=1038, y=695)
+            
+                self.__window_find_employee.after(3000, self.__success.destroy)
+
+            else:
+                self.__failed_image = tk.PhotoImage(file = '../Pictures/Icons/failed.png')
+                self.__failed = tk.Label(self.__window_find_employee, borderwidth=0, highlightthickness=0, image = self.__failed_image)
+                self.__failed.place(x=1038, y=695)
+            
+                self.__window_find_employee.after(3000, self.__failed.destroy)
+
+        elif self.personal_id.get() != EMPTY and self.company_tax_id.get() == EMPTY:
+            employee_exists, employee = CompanyManagment.check_employee_existance(self.personal_id.get())
+
+            if employee_exists == True:
+
+                self.list_box_frame = tk.Frame(self.__window_find_employee)
+                self.list_box_frame.place(relx=0.3, rely=0.6, anchor='center')
+                
+                self.list_box = tk.Listbox(self.list_box_frame, width=30, height=16, bg='black', fg='white', font = ('DejaVu Serif', 20, 'bold'))
+                self.list_box.pack(side="left", fill="y")
+
+                counter = 0
+
+                for employee in CompanyManagment.employees_list:
+                    if employee.get_personal_id() == self.personal_id.get():
+                        self.list_box.insert(tk.END, str(counter) + ".EMPLOYEE")
+                        self.list_box.insert(tk.END, employee.get_name() + ' ' + employee.get_surname())
+                        self.list_box.insert(tk.END, employee.get_personal_id())
+                        self.list_box.insert(tk.END, employee.get_address())
+                        self.list_box.insert(tk.END, employee.get_birthday())
+                        self.list_box.insert(tk.END, employee.get_company_tax_id())
+                        self.list_box.insert(tk.END, employee.get_salary())
+                        self.list_box.insert(tk.END, '____________________________________________')
+                        counter += 1
+                
+                self.scrollbar = tk.Scrollbar(self.list_box_frame, orient="vertical")
+                self.scrollbar.config(command=self.list_box.yview)
+                self.scrollbar.pack(side="right", fill="y")
+
+                self.list_box.config(yscrollcommand=self.scrollbar.set)
+
+                self.__success_image = tk.PhotoImage(file = '../Pictures/Icons/success.png')
+                self.__success = tk.Label(self.__window_find_employee, borderwidth=0, highlightthickness=0, image = self.__success_image)
+                self.__success.place(x=1038, y=695)
+            
+                self.__window_find_employee.after(3000, self.__success.destroy)
+
+            else:
+                self.__failed_image = tk.PhotoImage(file = '../Pictures/Icons/failed.png')
+                self.__failed = tk.Label(self.__window_find_employee, borderwidth=0, highlightthickness=0, image = self.__failed_image)
+                self.__failed.place(x=1038, y=695)
+            
+                self.__window_find_employee.after(3000, self.__failed.destroy)
+
+        else:
+            self.__failed_image = tk.PhotoImage(file = '../Pictures/Icons/failed.png')
+            self.__failed = tk.Label(self.__window_find_employee, borderwidth=0, highlightthickness=0, image = self.__failed_image)
+            self.__failed.place(x=1038, y=695)
+        
+            self.__window_find_employee.after(3000, self.__failed.destroy)
+
+    def submit_find_company(self):
+        EMPTY = ''
+
+        if self.tax_id.get() != EMPTY:
+            company_exists, company = CompanyManagment.check_company_existance(self.tax_id.get())
+        
+            if company_exists == True:
+
+                self.list_box_frame = tk.Frame(self.__window_find_company)
+                self.list_box_frame.place(relx=0.3, rely=0.6, anchor='center')
+                
+                self.list_box = tk.Listbox(self.list_box_frame, width=30, height=16, bg='black', fg='white', font = ('DejaVu Serif', 20, 'bold'))
+                self.list_box.pack(side="left", fill="y")
+
+                self.list_box.insert(tk.END, "COMPANY")
+                self.list_box.insert(tk.END, company.get_founder_name() + ' ' + company.get_founder_surname())
+                self.list_box.insert(tk.END, company.get_company_name())
+                self.list_box.insert(tk.END, company.get_company_address())
+                self.list_box.insert(tk.END, company.get_tax_id())
+                self.list_box.insert(tk.END, company.get_foundation_year())
+                self.list_box.insert(tk.END, '____________________________________________')
+                            
+                self.scrollbar = tk.Scrollbar(self.list_box_frame, orient="vertical")
+                self.scrollbar.config(command=self.list_box.yview)
+                self.scrollbar.pack(side="right", fill="y")
+
+                self.list_box.config(yscrollcommand=self.scrollbar.set)
+
+                self.__success_image = tk.PhotoImage(file = '../Pictures/Icons/success.png')
+                self.__success = tk.Label(self.__window_find_company, borderwidth=0, highlightthickness=0, image = self.__success_image)
+                self.__success.place(x=1038, y=695)
+            
+                self.__window_find_company.after(3000, self.__success.destroy)
+            
+            else:
+                self.__failed_image = tk.PhotoImage(file = '../Pictures/Icons/failed.png')
+                self.__failed = tk.Label(self.__window_find_employee, borderwidth=0, highlightthickness=0, image = self.__failed_image)
+                self.__failed.place(x=1038, y=695)
+            
+                self.__window_find_employee.after(3000, self.__failed.destroy)
+
+        else:
+            self.__failed_image = tk.PhotoImage(file = '../Pictures/Icons/failed.png')
+            self.__failed = tk.Label(self.__window_find_employee, borderwidth=0, highlightthickness=0, image = self.__failed_image)
+            self.__failed.place(x=1038, y=695)
+        
+            self.__window_find_employee.after(3000, self.__failed.destroy)
