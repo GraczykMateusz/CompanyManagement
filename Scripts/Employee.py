@@ -1,11 +1,11 @@
-class Employee:
-    def __init__(self, name, surname, personal_id, address, birthday, company_name, salary):
+class Employee: 
+    def __init__(self, name, surname, personal_id, address, birthday, company_tax_id, salary):
         self.__name = name
         self.__surname = surname
         self.__personal_id = personal_id
         self.__address = address
         self.__birthday = birthday
-        self.__company_name = company_name
+        self.__company_tax_id = company_tax_id
         self.__salary = salary
 
     def get_name(self):
@@ -23,8 +23,8 @@ class Employee:
     def get_birthday(self):
         return self.__birthday
 
-    def get_company_name(self):
-        return self.__company_name
+    def get_company_tax_id(self):
+        return self.__company_tax_id
 
     def get_salary(self):
         return self.__salary
