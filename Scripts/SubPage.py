@@ -6,6 +6,10 @@ from CompanyManagment import CompanyManagment
 import tkinter as tk
 import time as tm
 
+#
+import mysql.connector
+#
+
 class SubPage(Page):
 
     def __init__(self, geometry="1175x775"):
@@ -21,6 +25,9 @@ class SubPage(Page):
         self.__window_delete_employee = None
         self.__window_find_employee = None
         self.__window_list_employee = None
+
+        self.__window_download_database = None
+        self.__window_send_database = None
 
         self.__entry_list = []
 
@@ -213,8 +220,24 @@ class SubPage(Page):
         SubPage.submit_button(self.__window_find_employee, self.submit_find_employee)
 
     def view_send_database(self): 
-        print(self.__entry_list)       
-        print('TEST 9')
+        self.__window_send_database = self.check_window_existence(self.__window_send_database)
+
+        if self.tip == True:
+            self.window_config(self.__window_send_database, "../Pictures/Background/database_send_background_tip.png", "../Pictures/Icons/employee_find_image.png")
+        else:
+            self.window_config(self.__window_send_database, "../Pictures/Background/database_send_background.png", "../Pictures/Icons/employee_find_image.png")
+
+        self.host = tk.Variable()
+        self.user = tk.Variable()
+        self.database = tk.Variable()
+        self.password = tk.Variable()
+
+        self.add_entry(self.__window_send_database, self.host, 313)
+        self.add_entry(self.__window_send_database, self.user, 410)
+        self.add_entry(self.__window_send_database, self.database, 506)
+        self.add_entry(self.__window_send_database, self.password, 603)
+
+        SubPage.submit_button(self.__window_send_database, self.submit_send_database)
 
     def view_download_database(self):
         print('TEST 10')
@@ -415,8 +438,6 @@ class SubPage(Page):
             self.__failed.place(x=1038, y=695)
         
             self.__window_add_company.after(3000, self.__failed.destroy)
-
-
 
     def submit_delete_company(self):
         EMPTY = ''
@@ -619,3 +640,95 @@ class SubPage(Page):
             self.__failed.place(x=1038, y=695)
         
             self.__window_find_employee.after(3000, self.__failed.destroy)
+
+#------------------------------------------
+
+    def submit_send_database(self, host_name="localhost", user_name="root", password="123"):
+
+        my_db = mysql.connector.connect(
+            host=host_name,
+            user=user_name,
+            passwd=password,
+        )
+
+        my_cursor = my_db.cursor()
+
+        drop_old_database = "DROP DATABASE IF EXISTS Company_Managment_Database"
+        create_new_database = "CREATE DATABASE IF NOT EXISTS Company_Managment_Database"
+
+        my_cursor.execute(drop_old_database)
+        my_cursor.execute(create_new_database)
+
+        my_db = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            passwd="123",
+            database="Company_Managment_Database"
+        )
+
+        my_cursor = my_db.cursor()
+        
+        create_new_companies_table = (
+            "CREATE TABLE IF NOT EXISTS Companies "
+            "(Founder_Name VARCHAR(255), Founder_Surname VARCHAR(255), Company_Name VARCHAR(255), "
+            "Company_Address VARCHAR(255), Tax_ID VARCHAR(255), Foundation_Year VARCHAR(255))"
+        )
+        
+        create_new_employees_table = (
+            "CREATE TABLE IF NOT EXISTS Employees "
+            "(Name VARCHAR(255), Surname VARCHAR(255), Personal_ID VARCHAR(255), "
+            "Address VARCHAR(255), Birthday VARCHAR(255), Company_Tax_ID VARCHAR(255), "
+            "Salary VARCHAR(255))"
+        )
+        
+        my_cursor.execute(create_new_companies_table)
+        my_cursor.execute(create_new_employees_table)
+        
+        add_company_sql = (
+            "INSERT INTO Companies "
+            "(Founder_Name, Founder_Surname, Company_Name, "
+            "Company_Address, Tax_ID, Foundation_Year) "
+            "VALUES "
+            "(%(Founder_Name)s, %(Founder_Surname)s, %(Company_Name)s, "
+            "%(Company_Address)s, %(Tax_ID)s, %(Foundation_Year)s)"
+        )
+        
+        add_employee_sql = (
+            "INSERT INTO Employees "
+            "(Name, Surname, Personal_ID, Address, "
+            "Birthday, Company_Tax_ID, Salary) "
+            "VALUES "
+            "(%(Name)s, %(Surname)s, %(Personal_ID)s, "
+            "%(Address)s, %(Birthday)s, %(Company_Tax_ID)s, "
+            "%(Salary)s)"
+        )
+
+        for company in CompanyManagment.companies_list:
+            
+            company = {
+                'Founder_Name': company.get_founder_name(),
+                'Founder_Surname': company.get_founder_surname(),
+                'Company_Name': company.get_company_name(),
+                'Company_Address': company.get_company_address(),
+                'Tax_ID': company.get_tax_id(),
+                'Foundation_Year': company.get_foundation_year()
+            }
+            
+            my_cursor.execute(add_company_sql, company)       
+        
+        for employee in CompanyManagment.employees_list:
+
+            employee = {
+                'Name': employee.get_name(),
+                'Surname': employee.get_surname(),
+                'Personal_ID': employee.get_personal_id(),
+                'Address': employee.get_address(),
+                'Birthday': employee.get_birthday(),
+                'Company_Tax_ID': employee.get_company_tax_id(),
+                'Salary': employee.get_salary()
+            }
+
+            my_cursor.execute(add_employee_sql, employee)
+
+        my_db.commit()
+        
