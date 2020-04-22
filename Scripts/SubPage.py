@@ -74,7 +74,7 @@ class SubPage(Page):
     def view_list_company(self):
         self.__window_list_company = self.check_window_existence(self.__window_list_company)
 
-        self.window_config(self.__window_list_company, "../Pictures/Background/raw_background.png", "../Pictures/Icons/company_list_image.png")
+        self.window_config(self.__window_list_company, "../Pictures/Background/company_list_background.png", "../Pictures/Icons/company_list_image.png")
 
         self.list_box_frame = tk.Frame(self.__window_list_company)
         self.list_box_frame.place(relx=0.3, rely=0.6, anchor='center')
@@ -82,8 +82,9 @@ class SubPage(Page):
         self.list_box = tk.Listbox(self.list_box_frame, width=30, height=16, bg='black', fg='white', font = ('DejaVu Serif', 20, 'bold'))
         self.list_box.pack(side="left", fill="y")
 
-        counter = 1
+        counter = 0
         for company in CompanyManagment.companies_list:
+            counter += 1
             self.list_box.insert(tk.END, str(counter) + ".COMPANY")
             self.list_box.insert(tk.END, company.get_founder_name() + ' ' + company.get_founder_surname())
             self.list_box.insert(tk.END, company.get_company_name())
@@ -91,7 +92,6 @@ class SubPage(Page):
             self.list_box.insert(tk.END, company.get_tax_id())
             self.list_box.insert(tk.END, company.get_foundation_year())
             self.list_box.insert(tk.END, '____________________________________________')
-            counter += 1
         
         self.scrollbar = tk.Scrollbar(self.list_box_frame, orient="vertical")
         self.scrollbar.config(command=self.list_box.yview)
@@ -99,11 +99,31 @@ class SubPage(Page):
 
         self.list_box.config(yscrollcommand=self.scrollbar.set)
 
+        self.total = tk.Label(self.__window_list_company, font=('DejaVu Serif', '30'), bg='black', fg='white', text=str(counter))
+                
+        if counter >= 0 and counter < 10:
+            self.total.place(x=910, y=383)
+        elif counter >= 10 and counter < 100:
+            self.total.place(x=900, y=383)
+        elif counter >= 100 and counter < 1000:
+            self.total.place(x=890, y=383)
+        elif counter >= 1000 and counter < 10000:
+            self.total.place(x=880, y=383)
+        elif counter >= 10000:
+            self.total = tk.Label(self.__window_list_company, font=('DejaVu Serif', '30'), bg='black', fg='white', text='10000+')
+            self.total.place(x=860, y=383)
+        else:
+            self.total = tk.Label(self.__window_list_company, font=('DejaVu Serif', '30'), bg='black', fg='white', text='#Error#')
+            self.total.place(x=840, y=383)
+
     def view_find_company(self):
         self.__window_find_company = self.check_window_existence(self.__window_find_company)
-
-        self.window_config(self.__window_find_company, "../Pictures/Background/company_find_background.png", "../Pictures/Icons/company_find_image.png")
-
+        
+        if self.tip == True:
+            self.window_config(self.__window_find_company, "../Pictures/Background/company_find_background_tip.png", "../Pictures/Icons/company_find_image.png")
+        else:
+            self.window_config(self.__window_find_company, "../Pictures/Background/company_find_background.png", "../Pictures/Icons/company_find_image.png")
+            
         self.list_box_frame = tk.Frame(self.__window_find_company)
         self.list_box_frame.place(relx=0.3, rely=0.6, anchor='center')
         
@@ -118,7 +138,7 @@ class SubPage(Page):
 
         self.tax_id = tk.Variable()
 
-        self.add_entry(self.__window_find_company, self.tax_id, 424, 840)
+        self.add_entry(self.__window_find_company, self.tax_id, 358, 840)
 
         SubPage.submit_button(self.__window_find_company, self.submit_find_company)
 
@@ -168,7 +188,7 @@ class SubPage(Page):
     def view_list_employee(self):
         self.__window_list_employee = self.check_window_existence(self.__window_list_employee)
 
-        self.window_config(self.__window_list_employee, "../Pictures/Background/raw_background.png", "../Pictures/Icons/employee_list_image.png")
+        self.window_config(self.__window_list_employee, "../Pictures/Background/employee_list_background.png", "../Pictures/Icons/employee_list_image.png")
 
         self.list_box_frame = tk.Frame(self.__window_list_employee)
         self.list_box_frame.place(relx=0.3, rely=0.6, anchor='center')
@@ -176,8 +196,9 @@ class SubPage(Page):
         self.list_box = tk.Listbox(self.list_box_frame, width=30, height=16, bg='black', fg='white', font = ('DejaVu Serif', 20, 'bold'))
         self.list_box.pack(side="left", fill="y")
 
-        counter = 1
+        counter = 0
         for employee in CompanyManagment.employees_list:
+            counter += 1
             self.list_box.insert(tk.END, str(counter) + ".COMPANY")
             self.list_box.insert(tk.END, employee.get_name() + ' ' + employee.get_surname())
             self.list_box.insert(tk.END, employee.get_personal_id())
@@ -186,18 +207,37 @@ class SubPage(Page):
             self.list_box.insert(tk.END, employee.get_company_tax_id())
             self.list_box.insert(tk.END, employee.get_salary())
             self.list_box.insert(tk.END, '____________________________________________')
-            counter += 1
         
         self.scrollbar = tk.Scrollbar(self.list_box_frame, orient="vertical")
         self.scrollbar.config(command=self.list_box.yview)
         self.scrollbar.pack(side="right", fill="y")
 
         self.list_box.config(yscrollcommand=self.scrollbar.set)
+
+        self.total = tk.Label(self.__window_list_employee, font=('DejaVu Serif', '30'), bg='black', fg='white', text=str(counter))
         
+        if counter >= 0 and counter < 10:
+            self.total.place(x=910, y=383)
+        elif counter >= 10 and counter < 100:
+            self.total.place(x=900, y=383)
+        elif counter >= 100 and counter < 1000:
+            self.total.place(x=890, y=383)
+        elif counter >= 1000 and counter < 10000:
+            self.total.place(x=880, y=383)
+        elif counter >= 10000:
+            self.total = tk.Label(self.__window_list_employee, font=('DejaVu Serif', '30'), bg='black', fg='white', text='10000+')
+            self.total.place(x=860, y=383)
+        else:
+            self.total = tk.Label(self.__window_list_employee, font=('DejaVu Serif', '30'), bg='black', fg='white', text='#Error#')
+            self.total.place(x=840, y=383)
+    
     def view_find_employee(self):
         self.__window_find_employee = self.check_window_existence(self.__window_find_employee)
 
-        self.window_config(self.__window_find_employee, "../Pictures/Background/employee_find_background.png", "../Pictures/Icons/employee_find_image.png")
+        if self.tip == True:
+            self.window_config(self.__window_find_employee, "../Pictures/Background/employee_find_background_tip.png", "../Pictures/Icons/employee_find_image.png")
+        else:
+            self.window_config(self.__window_find_employee, "../Pictures/Background/employee_find_background.png", "../Pictures/Icons/employee_find_image.png")
 
         self.list_box_frame = tk.Frame(self.__window_find_employee)
         self.list_box_frame.place(relx=0.3, rely=0.6, anchor='center')
@@ -223,9 +263,9 @@ class SubPage(Page):
         self.__window_send_database = self.check_window_existence(self.__window_send_database)
 
         if self.tip == True:
-            self.window_config(self.__window_send_database, "../Pictures/Background/database_send_background_tip.png", "../Pictures/Icons/employee_find_image.png")
+            self.window_config(self.__window_send_database, "../Pictures/Background/database_send_background_tip.png", "../Pictures/Icons/send_image.png")
         else:
-            self.window_config(self.__window_send_database, "../Pictures/Background/database_send_background.png", "../Pictures/Icons/employee_find_image.png")
+            self.window_config(self.__window_send_database, "../Pictures/Background/database_send_background.png", "../Pictures/Icons/send_image.png")
 
         self.host = tk.Variable()
         self.user = tk.Variable()
@@ -240,7 +280,24 @@ class SubPage(Page):
         SubPage.submit_button(self.__window_send_database, self.submit_send_database)
 
     def view_download_database(self):
-        print('TEST 10')
+        self.__window_download_database = self.check_window_existence(self.__window_download_database)
+
+        if self.tip == True:
+            self.window_config(self.__window_download_database, "../Pictures/Background/database_download_background_tip.png", "../Pictures/Icons/download_image.png")
+        else:
+            self.window_config(self.__window_download_database, "../Pictures/Background/database_download_background.png", "../Pictures/Icons/download_image.png")
+
+        self.host = tk.Variable()
+        self.user = tk.Variable()
+        self.database = tk.Variable()
+        self.password = tk.Variable()
+
+        self.add_entry(self.__window_download_database, self.host, 313)
+        self.add_entry(self.__window_download_database, self.user, 410)
+        self.add_entry(self.__window_download_database, self.database, 506)
+        self.add_entry(self.__window_download_database, self.password, 603)
+
+        SubPage.submit_button(self.__window_download_database, self.submit_download_database)
 
     def check_window_tip(self, tip):
         self.tip = tip
@@ -670,14 +727,14 @@ class SubPage(Page):
         
         create_new_companies_table = (
             "CREATE TABLE IF NOT EXISTS Companies "
-            "(Founder_Name VARCHAR(255), Founder_Surname VARCHAR(255), Company_Name VARCHAR(255), "
-            "Company_Address VARCHAR(255), Tax_ID VARCHAR(255), Foundation_Year VARCHAR(255))"
+            "(Tax_ID VARCHAR(255), Founder_Name VARCHAR(255), Founder_Surname VARCHAR(255), "
+            "Company_Name VARCHAR(255), Company_Address VARCHAR(255), Foundation_Year VARCHAR(255))"
         )
         
         create_new_employees_table = (
             "CREATE TABLE IF NOT EXISTS Employees "
-            "(Name VARCHAR(255), Surname VARCHAR(255), Personal_ID VARCHAR(255), "
-            "Address VARCHAR(255), Birthday VARCHAR(255), Company_Tax_ID VARCHAR(255), "
+            "(Company_Tax_ID VARCHAR(255), Personal_ID VARCHAR(255), Name VARCHAR(255), "
+            "Surname VARCHAR(255), Address VARCHAR(255), Birthday VARCHAR(255), "
             "Salary VARCHAR(255))"
         )
         
@@ -686,31 +743,32 @@ class SubPage(Page):
         
         add_company_sql = (
             "INSERT INTO Companies "
-            "(Founder_Name, Founder_Surname, Company_Name, "
-            "Company_Address, Tax_ID, Foundation_Year) "
+            "(Tax_ID, Founder_Name, Founder_Surname, "
+            "Company_Name, Company_Address, Foundation_Year) "
             "VALUES "
-            "(%(Founder_Name)s, %(Founder_Surname)s, %(Company_Name)s, "
-            "%(Company_Address)s, %(Tax_ID)s, %(Foundation_Year)s)"
+            "(%(Tax_ID)s, %(Founder_Name)s, %(Founder_Surname)s, "
+            "%(Company_Name)s,%(Company_Address)s, %(Foundation_Year)s)"
         )
         
         add_employee_sql = (
             "INSERT INTO Employees "
-            "(Name, Surname, Personal_ID, Address, "
-            "Birthday, Company_Tax_ID, Salary) "
+            "(Company_Tax_ID, Personal_ID, Name, "
+            "Surname, Address, Birthday, "
+            "Salary)"
             "VALUES "
-            "(%(Name)s, %(Surname)s, %(Personal_ID)s, "
-            "%(Address)s, %(Birthday)s, %(Company_Tax_ID)s, "
+            "(%(Company_Tax_ID)s, %(Personal_ID)s, %(Name)s, "
+            "%(Surname)s, %(Address)s, %(Birthday)s, "
             "%(Salary)s)"
         )
 
         for company in CompanyManagment.companies_list:
             
             company = {
+                'Tax_ID': company.get_tax_id(),
                 'Founder_Name': company.get_founder_name(),
                 'Founder_Surname': company.get_founder_surname(),
                 'Company_Name': company.get_company_name(),
                 'Company_Address': company.get_company_address(),
-                'Tax_ID': company.get_tax_id(),
                 'Foundation_Year': company.get_foundation_year()
             }
             
@@ -719,12 +777,12 @@ class SubPage(Page):
         for employee in CompanyManagment.employees_list:
 
             employee = {
+                'Company_Tax_ID': employee.get_company_tax_id(),
+                'Personal_ID': employee.get_personal_id(),
                 'Name': employee.get_name(),
                 'Surname': employee.get_surname(),
-                'Personal_ID': employee.get_personal_id(),
                 'Address': employee.get_address(),
                 'Birthday': employee.get_birthday(),
-                'Company_Tax_ID': employee.get_company_tax_id(),
                 'Salary': employee.get_salary()
             }
 
@@ -732,3 +790,85 @@ class SubPage(Page):
 
         my_db.commit()
         
+    def submit_download_database(self, host_name="localhost", user_name="root", password="123"):
+        my_db = mysql.connector.connect(
+            host=host_name,
+            user=user_name,
+            passwd=password,
+            database="Company_Managment_Database"
+        )
+
+        CompanyManagment.companies_list.clear()
+        CompanyManagment.employees_list.clear()
+
+        my_cursor = my_db.cursor()
+
+        my_cursor.execute("SELECT * FROM Companies")
+        result = my_cursor.fetchall()
+
+        #Delete data from txt
+        with open('../Data/CompaniesData.txt', 'w') as f:
+            pass
+
+        with open('../Data/EmployeesData.txt', 'w') as f:
+            pass
+
+        lines_arr = []
+
+        for row in result:
+            for data in row:
+                lines_arr.append(data)
+                if len(lines_arr) == 6:
+                    tax_id = lines_arr[0]
+                    founder_name = lines_arr[1]
+                    founder_surname = lines_arr[2]
+                    company_name = lines_arr[3]
+                    company_address = lines_arr[4]
+                    foundation_year = lines_arr[5]
+
+                    company = Company(founder_name, founder_surname, company_name, company_address, tax_id, foundation_year)
+                    CompanyManagment.companies_list.append(company)
+
+                    with open('../Data/CompaniesData.txt', 'a') as f:
+                        f.write(tax_id + '\n')
+                        f.write(founder_name + '\n')
+                        f.write(founder_surname + '\n')
+                        f.write(company_name + '\n')
+                        f.write(company_address + '\n')
+                        f.write(foundation_year + '\n')
+                        f.write('#' + '\n')
+
+                    lines_arr.clear()
+
+
+        my_cursor.execute("SELECT * FROM Employees")
+        result = my_cursor.fetchall()
+
+        for row in result:
+            for data in row:
+                lines_arr.append(data)
+                if len(lines_arr) == 7:
+                    company_tax_id = lines_arr[0]
+                    personal_id = lines_arr[1]
+                    name = lines_arr[2]
+                    surname = lines_arr[3]
+                    address = lines_arr[4]
+                    birthday = lines_arr[5]
+                    salary = lines_arr[6]
+
+                    employee = Employee(name, surname, personal_id, address, birthday, company_tax_id, salary)
+                    CompanyManagment.employees_list.append(employee)
+
+                    with open('../Data/EmployeesData.txt', 'a') as f:
+                        f.write(company_tax_id + '\n')
+                        f.write(personal_id + '\n')
+                        f.write(name + '\n')
+                        f.write(surname + '\n')
+                        f.write(address + '\n')
+                        f.write(birthday + '\n')
+                        f.write(salary + '\n')
+                        f.write('#' + '\n')
+
+                    lines_arr.clear()
+
+        my_cursor.close()
