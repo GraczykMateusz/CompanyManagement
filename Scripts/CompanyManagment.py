@@ -13,72 +13,94 @@ class CompanyManagment:
 
     @classmethod
     def __import_employees(cls):
-        
-        with open('../Data/EmployeesData.txt', 'r') as f:
-            
-            temp = []
-            
-            for line in f:
-                line = line.strip()
-                temp.append(line)
+        try:
+            with open('../Data/EmployeesData.txt', 'r') as f:
+                
+                lines_arr = []
+                
+                for line in f:
+                    line = line.strip()
+                    lines_arr.append(line)
 
-                if line == '#':
-                    for company in cls.companies_list:
-                        if company.get_company_name() == temp[5]:
+                    if line == '#':
+                        for company in cls.companies_list:
+                            if company.get_tax_id() == lines_arr[0]:
 
-                            name = temp[0]
-                            surname = temp[1]
-                            personal_id = temp[2]
-                            address = temp[3]
-                            birthday = temp[4]
-                            company_name = temp[5]
-                            salary = temp[6]
+                                company_tax_id = lines_arr[0]
+                                personal_id = lines_arr[1]
+                                name = lines_arr[2]
+                                surname = lines_arr[3]
+                                address = lines_arr[4]
+                                birthday = lines_arr[5]
+                                salary = lines_arr[6]
 
-                            temp.clear()
+                                lines_arr.clear()
 
-                            employee = Employee(name, surname, personal_id, address, birthday, company_name, salary)
-                            cls.employees_list.append(employee)
+                                employee = Employee(name, surname, personal_id, address, birthday, company_tax_id, salary)
+                                cls.employees_list.append(employee)
 
-                            break
+                                break
 
-            temp.clear()
+                lines_arr.clear()
+        except:
+            pass
 
     @classmethod
     def __import_companies(cls):
-        
-        with open('../Data/CompaniesData.txt', 'r') as f:
-            
-            temp = []
-            
-            for line in f:
-                line = line.strip()
-                temp.append(line)
+        try:
+            with open('../Data/CompaniesData.txt', 'r') as f:
+                
+                lines_arr = []
+                
+                for line in f:
+                    line = line.strip()
+                    lines_arr.append(line)
 
-                if line == '#':
-                    founder_name = temp[0]
-                    founder_surname = temp[1]
-                    company_name = temp[2]
-                    company_address = temp[3]
-                    tax_id = temp[4] 
-                    foundation_year = temp[5]
+                    if line == '#':
+                        tax_id = lines_arr[0]
+                        founder_name = lines_arr[1]
+                        founder_surname = lines_arr[2]
+                        company_name = lines_arr[3]
+                        company_address = lines_arr[4]
+                        foundation_year = lines_arr[5]
 
-                    temp.clear()
+                        lines_arr.clear()
 
-                    company = Company(founder_name, founder_surname, company_name, company_address, tax_id, foundation_year)
-                    cls.companies_list.append(company)
+                        company = Company(founder_name, founder_surname, company_name, company_address, tax_id, foundation_year)
+                        cls.companies_list.append(company)
 
-            temp.clear()
+                lines_arr.clear()
+        except:
+            pass
 
     @classmethod
-    def check_employee_existance(cls, personal_id):
+    def check_employee_existance(cls, personal_id, company_tax_id=None):
         for employee in CompanyManagment.employees_list:
-            if employee.get_personal_id() == personal_id:
+            if employee.get_personal_id() == personal_id and company_tax_id == None:
+                return True, employee
+            if employee.get_personal_id() == personal_id and employee.get_company_tax_id() == company_tax_id:
                 return True, employee
         return False, None
 
     @classmethod
-    def check_company_existance(cls, tax_id):
+    def check_company_existance(cls, company_tax_id):
         for company in CompanyManagment.companies_list:
-            if company.get_tax_id() == tax_id:
+            if company.get_tax_id() == company_tax_id:
                 return True, company
         return False, None
+
+    @classmethod
+    def add_company(cls):
+        pass
+
+    @classmethod
+    def delete_company(cls):
+        pass
+
+    @classmethod
+    def add_employee(cls):
+        pass
+
+    @classmethod
+    def delete_employee(cls):
+        pass
