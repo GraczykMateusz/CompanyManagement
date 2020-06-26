@@ -1,5 +1,10 @@
 class Employee: 
-    def __init__(self, name, surname, personal_id, address, birthday, company_tax_id, salary):
+    '''Create an employee object with data'''
+    def __init__(
+        self, name, surname,
+        personal_id, address, birthday,
+        company_tax_id, salary
+    ):    
         self.__name = name
         self.__surname = surname
         self.__personal_id = personal_id
