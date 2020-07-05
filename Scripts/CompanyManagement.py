@@ -1,8 +1,15 @@
 from Company import Company
 from Employee import Employee
 
-class CompanyManagment:
-
+class CompanyManagement:
+    '''
+    CompanyManagement class is responsible for manages companies and
+    their employees. It imports companies with employees from
+    txt database when program is starting. Checks existence of
+    companies and employees on the basis of:
+    - company_tax_id for companies;
+    - personal_id, company_tax_id(optional) for employees.
+    '''
     companies_list = []
     employees_list = []
 
@@ -36,7 +43,11 @@ class CompanyManagment:
 
                                 lines_arr.clear()
 
-                                employee = Employee(name, surname, personal_id, address, birthday, company_tax_id, salary)
+                                employee = Employee(
+                                    name, surname, personal_id,
+                                    address, birthday, company_tax_id,
+                                    salary
+                                )    
                                 cls.employees_list.append(employee)
 
                                 break
@@ -66,7 +77,10 @@ class CompanyManagment:
 
                         lines_arr.clear()
 
-                        company = Company(founder_name, founder_surname, company_name, company_address, tax_id, foundation_year)
+                        company = Company(
+                            founder_name, founder_surname, company_name,
+                            company_address, tax_id, foundation_year
+                        )    
                         cls.companies_list.append(company)
 
                 lines_arr.clear()
@@ -74,19 +88,24 @@ class CompanyManagment:
             pass
 
     @classmethod
-    def check_employee_existance(cls, personal_id, company_tax_id=None):
-        for employee in CompanyManagment.employees_list:
-            if employee.get_personal_id() == personal_id and company_tax_id == None:
+    def check_employee_existence(cls, personal_id, company_tax_id=None):
+        for employee in CompanyManagement.employees_list:
+            if (employee.get_personal_id() == personal_id and 
+                company_tax_id == None):
                 return True, employee
-            if employee.get_personal_id() == personal_id and employee.get_company_tax_id() == company_tax_id:
+
+            if (employee.get_personal_id() == personal_id and
+                employee.get_company_tax_id() == company_tax_id):
                 return True, employee
+
         return False, None
 
     @classmethod
-    def check_company_existance(cls, company_tax_id):
-        for company in CompanyManagment.companies_list:
+    def check_company_existence(cls, company_tax_id):
+        for company in CompanyManagement.companies_list:
             if company.get_tax_id() == company_tax_id:
                 return True, company
+                
         return False, None
 
     @classmethod
@@ -98,9 +117,25 @@ class CompanyManagment:
         pass
 
     @classmethod
+    def list_companies(cls):
+        pass
+    
+    @classmethod
+    def find_company(cls):
+        pass
+
+    @classmethod
     def add_employee(cls):
         pass
 
     @classmethod
     def delete_employee(cls):
+        pass
+
+    @classmethod
+    def list_employees(cls):
+        pass
+
+    @classmethod
+    def find_employee(cls):
         pass

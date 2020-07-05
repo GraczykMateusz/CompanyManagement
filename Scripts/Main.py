@@ -1,9 +1,8 @@
-from CompanyManagment import CompanyManagment
+from CompanyManagement import CompanyManagement
 from StartPage import StartPage
 
 if __name__ == "__main__":
-    
-    CompanyManagment.import_data()
+    CompanyManagement.import_data()
 
     window = StartPage()
     window.mainloop()
