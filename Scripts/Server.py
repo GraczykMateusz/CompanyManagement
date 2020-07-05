@@ -5,9 +5,20 @@ from Employee import Employee
 from CompanyManagement import CompanyManagement
 
 class Server:
+    '''
+    The class is responsible for connecting to the server to download or send data.
+    My default database:
+    host="localhost",
+    user="root",
+    passwd="123",
+    database="Company_Managment_Database"
+    '''
     @classmethod
-    def submit_send_database(cls, host_name="localhost", user_name="root", password="123"):
-
+    def submit_send_database(
+        cls, host_name=None, user_name=None,
+        db=None, password=None
+    ):
+        
         my_db = mysql.connector.connect(
             host=host_name,
             user=user_name,
@@ -16,17 +27,17 @@ class Server:
 
         my_cursor = my_db.cursor()
 
-        drop_old_database = "DROP DATABASE IF EXISTS Company_Managment_Database"
-        create_new_database = "CREATE DATABASE IF NOT EXISTS Company_Managment_Database"
+        drop_old_database = "DROP DATABASE IF EXISTS " + db
+        create_new_database = "CREATE DATABASE IF NOT EXISTS " + db
 
         my_cursor.execute(drop_old_database)
         my_cursor.execute(create_new_database)
 
         my_db = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            passwd="123",
-            database="Company_Managment_Database"
+            host=host_name,
+            user=user_name,
+            passwd=password,
+            database=db
         )
 
         my_cursor = my_db.cursor()
@@ -99,12 +110,16 @@ class Server:
         my_cursor.close()
         
     @classmethod
-    def submit_download_database(cls, host_name="localhost", user_name="root", password="123"):
+    def submit_download_database(
+        cls, host_name=None, user_name=None,
+        db=None, password=None
+    ):
+
         my_db = mysql.connector.connect(
             host=host_name,
             user=user_name,
             passwd=password,
-            database="Company_Managment_Database"
+            database=db
         )
 
         CompanyManagement.companies_list.clear()
@@ -135,7 +150,8 @@ class Server:
                     company_address = lines_arr[4]
                     foundation_year = lines_arr[5]
 
-                    company = Company(founder_name, founder_surname, company_name, company_address, tax_id, foundation_year)
+                    company = Company(founder_name, founder_surname, company_name,
+                                      company_address, tax_id, foundation_year)
                     CompanyManagement.companies_list.append(company)
 
                     with open('../Data/CompaniesData.txt', 'a') as f:
@@ -165,7 +181,8 @@ class Server:
                     birthday = lines_arr[5]
                     salary = lines_arr[6]
 
-                    employee = Employee(name, surname, personal_id, address, birthday, company_tax_id, salary)
+                    employee = Employee(name, surname, personal_id, address,
+                                        birthday, company_tax_id, salary)
                     CompanyManagement.employees_list.append(employee)
 
                     with open('../Data/EmployeesData.txt', 'a') as f:
