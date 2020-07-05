@@ -7,10 +7,6 @@ from Employee import Employee
 from CompanyManagement import CompanyManagement
 from Server import Server
 
-#
-import mysql.connector
-#
-
 class SubPage(Page):
     
     def __init__(self, geometry="1175x775"):
@@ -278,7 +274,7 @@ class SubPage(Page):
         self.add_entry(self.__window_send_database, self.database, 506)
         self.add_entry(self.__window_send_database, self.password, 603)
 
-        SubPage.submit_button(self.__window_send_database, Server.submit_send_database)
+        SubPage.submit_button(self.__window_send_database, lambda: Server.submit_send_database(self.host.get(), self.user.get(), self.database.get(), self.password.get()))
 
     def view_download_database(self):
         self.__window_download_database = self.check_window_existence(self.__window_download_database)
@@ -298,7 +294,7 @@ class SubPage(Page):
         self.add_entry(self.__window_download_database, self.database, 506)
         self.add_entry(self.__window_download_database, self.password, 603)
         
-        SubPage.submit_button(self.__window_download_database, Server.submit_download_database)
+        SubPage.submit_button(self.__window_download_database, lambda: Server.submit_download_database(self.host.get(), self.user.get(), self.database.get(), self.password.get()))
 
     def checks_tip(self, tip):
         self.tip = tip
