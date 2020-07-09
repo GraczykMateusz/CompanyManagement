@@ -28,14 +28,82 @@ class SubPage(Page):
 
         self.__entry_list = []
 
+        self.is_complete = tk.StringVar()
+
+    def checks_tip(self, tip):
+        self.tip = tip
+
+    def check_window_existence(self, top):
+        if top is not None:
+            top.destroy()
+
+        self.__entry_list.clear()
+
+        top = tk.Toplevel()
+        return top
+
+    def window_config(self, top, background, path_to_image):
+        SubPage._set_window(top, self.__geometry)
+        SubPage._add_window_icon(top, path_to_image)
+        SubPage._add_background(top, background)
+    
+    def add_entry(self, window, save, position_y, position_x=485):
+        entry = tk.Entry(
+            window, justify='center', bd=4,
+            text=save, width=18, bg='grey',
+            font = ('DejaVu Serif', 13, 'bold')
+        )
+        entry.place(x = position_x, y = position_y)
+        self.__entry_list.append(entry)
+
+    def submit_button(self, event):
+        self.submit_button = tk.Button(
+            self, command=event, text="SUBMIT",
+            font = ('DejaVu Serif', 16, 'bold')
+        )
+        self.submit_button.place(x=1030, y=720)
+
+    def complete(self, window):
+            if self.is_complete.get() == "Success":
+                self.__image = tk.PhotoImage(
+                    file = '../Pictures/Icons/success.png'
+                )
+                
+            elif self.is_complete.get() == "Failed":
+                self.__image = tk.PhotoImage(
+                    file = '../Pictures/Icons/failed.png'
+                )
+                    
+            else:
+                self.__image = tk.PhotoImage(
+                    file = '../Pictures/Icons/already_exists.png'
+                )
+            
+            self.__complete = tk.Label(
+                window, borderwidth=0, highlightthickness=0,
+                image = self.__image
+            )
+            self.__complete.place(x=1038, y=695)
+
+            window.after(3000, self.__complete.destroy)
+
+#---------------------------- View Methods START ----------------------------#
+
     def view_add_company(self):
-        
         self.__window_add_company = self.check_window_existence(self.__window_add_company)
         
         if self.tip == True:
-            self.window_config(self.__window_add_company, "../Pictures/Background/company_add_background_tip.png", "../Pictures/Icons/company_add_image.png")
+            self.window_config(
+                self.__window_add_company,
+                "../Pictures/Background/company_add_background_tip.png",
+                "../Pictures/Icons/company_add_image.png"
+            )
         else:
-            self.window_config(self.__window_add_company, "../Pictures/Background/company_add_background.png", "../Pictures/Icons/company_add_image.png")
+            self.window_config(
+                self.__window_add_company,
+                "../Pictures/Background/company_add_background.png",
+                "../Pictures/Icons/company_add_image.png"
+            )
 
         self.founder_name = tk.Variable()
         self.founder_surname = tk.Variable()
@@ -51,8 +119,20 @@ class SubPage(Page):
         self.add_entry(self.__window_add_company, self.tax_id, 622)
         self.add_entry(self.__window_add_company, self.foundation_year, 709)
         
-        SubPage.submit_button(self.__window_add_company, self.submit_add_company)
+        SubPage.submit_button(
+            self.__window_add_company,
+            lambda: CompanyManagement.add_company(
+                self.is_complete, self.founder_name.get(), self.founder_surname.get(),
+                self.company_name.get(), self.company_address.get(), self.tax_id.get(),
+                self.foundation_year.get()
+            )
+        )        
 
+        self.is_complete.trace(
+            'w', lambda var, indx, mode:
+            self.complete(self.__window_add_company)
+        )            
+   
     def view_delete_company(self):
         self.__window_delete_company = self.check_window_existence(self.__window_delete_company)
 
@@ -65,8 +145,17 @@ class SubPage(Page):
 
         self.add_entry(self.__window_delete_company, self.tax_id, 320)
 
-        SubPage.submit_button(self.__window_delete_company, self.submit_delete_company)
+        SubPage.submit_button(
+            self.__window_delete_company,
+            lambda: CompanyManagement.delete_company(
+                self.is_complete, self.tax_id.get()
+            )
+        )
 
+        self.is_complete.trace(
+            'w', lambda var, indx, mode:
+            self.complete(self.__window_delete_company)
+        )            
 
     def view_list_company(self):
         self.__window_list_company = self.check_window_existence(self.__window_list_company)
@@ -164,7 +253,19 @@ class SubPage(Page):
         self.add_entry(self.__window_add_employee, self.company_tax_id, 277, 840)
         self.add_entry(self.__window_add_employee, self.salary, 366, 840)
         
-        SubPage.submit_button(self.__window_add_employee, self.submit_add_employee)
+        SubPage.submit_button(
+            self.__window_add_employee,
+            lambda: CompanyManagement.add_employee(
+                self.is_complete, self.name.get(), self.surname.get(),
+                self.personal_id.get(), self.address.get(), self.birthday.get(),
+                self.company_tax_id.get(), self.salary.get()
+            )
+        )
+
+        self.is_complete.trace(
+            'w', lambda var, indx, mode:
+            self.complete(self.__window_add_employee)
+        )   
 
     def view_delete_employee(self):
         self.__window_delete_employee = self.check_window_existence(self.__window_delete_employee)
@@ -174,13 +275,23 @@ class SubPage(Page):
         else:
             self.window_config(self.__window_delete_employee, "../Pictures/Background/employee_delete_background.png", "../Pictures/Icons/employee_delete_image.png")
 
-        self.personal_id = tk.Variable()
         self.company_tax_id = tk.Variable()
+        self.personal_id = tk.Variable()
 
         self.add_entry(self.__window_delete_employee, self.company_tax_id, 322)
         self.add_entry(self.__window_delete_employee, self.personal_id, 406)
 
-        SubPage.submit_button(self.__window_delete_employee, self.submit_delete_employee)
+        SubPage.submit_button(
+            self.__window_delete_employee,
+            lambda: CompanyManagement.delete_employee(
+                self.is_complete, self.company_tax_id.get(), self.personal_id.get()
+            )
+        )
+
+        self.is_complete.trace(
+            'w', lambda var, indx, mode:
+            self.complete(self.__window_delete_employee)
+        )   
 
     def view_list_employee(self):
         self.__window_list_employee = self.check_window_existence(self.__window_list_employee)
@@ -296,264 +407,9 @@ class SubPage(Page):
         
         SubPage.submit_button(self.__window_download_database, lambda: Server.submit_download_database(self.host.get(), self.user.get(), self.database.get(), self.password.get()))
 
-    def checks_tip(self, tip):
-        self.tip = tip
+#----------------------------- View Methods END -----------------------------#
 
-    def check_window_existence(self, top):
-        if top is not None:
-            top.destroy()
-
-        self.__entry_list.clear()
-
-        top = tk.Toplevel()
-        return top
-
-    def window_config(self, top, background, path_to_image):
-        SubPage._set_window(top, self.__geometry)
-        SubPage._add_window_icon(top, path_to_image)
-        SubPage._add_background(top, background)
-    
-    def add_entry(self, window, save, position_y, position_x=485):
-        entry = tk.Entry(window, justify='center', bd=4, text=save, width=18, bg='grey', font = ('DejaVu Serif', 13, 'bold'))
-        entry.place(x = position_x, y = position_y)
-        self.__entry_list.append(entry)
-
-    def submit_button(self, event):
-        self.submit_button = tk.Button(self, command=event, text="SUBMIT", font = ('DejaVu Serif', 16, 'bold'))
-        self.submit_button.place(x=1030, y=720)
-
-    def submit_add_employee(self):
-        empty = ''
-        company_exists, company = CompanyManagement.check_company_existence(self.company_tax_id.get())
-        employee_exists, employee = CompanyManagement.check_employee_existence(self.personal_id.get(), self.company_tax_id.get())
-
-        if (company_exists == True and
-            employee_exists == False and
-            self.name.get() != empty and
-            self.surname.get() != empty and
-            self.personal_id.get() != empty and
-            self.address.get() != empty and
-            self.birthday.get() != empty and
-            self.company_tax_id.get() != empty and
-            self.salary.get() != empty):
-
-            with open('../Data/EmployeesData.txt', 'a') as f:
-            
-                employee = Employee(self.name.get(),
-                                    self.surname.get(),
-                                    self.personal_id.get(),
-                                    self.address.get(),
-                                        self.birthday.get(),
-                                        self.company_tax_id.get(),
-                                        self.salary.get())
-
-                CompanyManagement.employees_list.append(employee)
-
-                f.write(employee.get_company_tax_id() + '\n')
-                f.write(employee.get_personal_id() + '\n')
-                f.write(employee.get_name() + '\n')
-                f.write(employee.get_surname() + '\n')
-                f.write(employee.get_address() + '\n')
-                f.write(employee.get_birthday() + '\n')
-                f.write(employee.get_salary() + '\n')
-                f.write('#' + '\n')
-
-                self.__success_image = tk.PhotoImage(file = '../Pictures/Icons/success.png')
-                self.__success = tk.Label(self.__window_add_employee, borderwidth=0, highlightthickness=0, image = self.__success_image)
-                self.__success.place(x=1038, y=695)
-            
-                self.__window_add_employee.after(3000, self.__success.destroy)
-
-        elif (company_exists == True and
-            employee_exists == True and
-            self.name.get() != empty and
-            self.surname.get() != empty and
-            self.personal_id.get() != empty and
-            self.address.get() != empty and
-            self.birthday.get() != empty and
-            self.company_tax_id.get() != empty and
-            self.salary.get() != empty):
-
-            self.__already_exists_image = tk.PhotoImage(file = '../Pictures/Icons/already_exists.png')
-            self.__already_exists = tk.Label(self.__window_add_employee, borderwidth=0, highlightthickness=0, image = self.__already_exists_image)
-            self.__already_exists.place(x=1038, y=695)
-        
-            self.__window_add_employee.after(3000, self.__already_exists.destroy)
-
-        else:
-            self.__failed_image = tk.PhotoImage(file = '../Pictures/Icons/failed.png')
-            self.__failed = tk.Label(self.__window_add_employee, borderwidth=0, highlightthickness=0, image = self.__failed_image)
-            self.__failed.place(x=1038, y=695)
-            
-            self.__window_add_employee.after(3000, self.__failed.destroy)
-        
-    def submit_delete_employee(self):
-        EMPTY = ''
-        END_LINE_SYMBOL = '#'
-        found_employee_to_delete = False
-        temp_company_tax_id = None
-
-        employee_exists, employee = CompanyManagement.check_employee_existence(self.personal_id.get(), self.company_tax_id.get())
-
-        if (employee_exists == True and
-            self.personal_id.get() != EMPTY and
-            self.company_tax_id.get() != EMPTY):
-
-            with open('../Data/EmployeesData.txt', 'r') as f:
-                lines = f.readlines()
-                
-            with open('../Data/EmployeesData.txt', 'w') as f:
-                for line in lines:
-                    
-                    if line.strip("\n") == employee.get_company_tax_id():
-                        temp_company_tax_id = line.strip("\n")
-
-                    elif line.strip("\n") == employee.get_personal_id() and temp_company_tax_id != None :
-                        found_employee_to_delete = True
-                    
-                    elif line.strip("\n") == END_LINE_SYMBOL and found_employee_to_delete == True:
-                        found_employee_to_delete = False
-                        temp_company_tax_id = None
-
-                    elif found_employee_to_delete == True:
-                        pass
-
-                    elif temp_company_tax_id != None and found_employee_to_delete == False:
-                        f.write(temp_company_tax_id + '\n')
-                        temp_company_tax_id = None
-                        f.write(line)
-                    else:
-                        f.write(line)
-
-            CompanyManagement.employees_list.remove(employee)
-
-            self.__success_image = tk.PhotoImage(file = '../Pictures/Icons/success.png')
-            self.__success = tk.Label(self.__window_delete_employee, borderwidth=0, highlightthickness=0, image = self.__success_image)
-            self.__success.place(x=1038, y=695)
-        
-            self.__window_delete_employee.after(3000, self.__success.destroy)
-
-        else:
-                self.__failed_image = tk.PhotoImage(file = '../Pictures/Icons/failed.png')
-                self.__failed = tk.Label(self.__window_delete_employee, borderwidth=0, highlightthickness=0, image = self.__failed_image)
-                self.__failed.place(x=1038, y=695)
-            
-                self.__window_delete_employee.after(3000, self.__failed.destroy)
-
-    def submit_add_company(self):
-        EMPTY = ''
-        company_exists, company = CompanyManagement.check_company_existence(self.tax_id.get())
-
-        if (company_exists == False and
-            self.founder_name.get()  != EMPTY and
-            self.founder_surname.get() != EMPTY and
-            self.company_name.get() != EMPTY and
-            self.company_address.get() != EMPTY and
-            self.tax_id.get() != EMPTY and
-            self.foundation_year.get() != EMPTY):
-
-            with open('../Data/CompaniesData.txt', 'a') as f:
-            
-                company = Company(self.founder_name.get(), self.founder_surname.get(), self.company_name.get(), self.company_address.get(), self.tax_id.get(), self.foundation_year.get())
-                
-                CompanyManagement.companies_list.append(company)
-
-                f.write(company.get_tax_id() + '\n')
-                f.write(company.get_founder_name() + '\n')
-                f.write(company.get_founder_surname() + '\n')
-                f.write(company.get_company_name() + '\n')
-                f.write(company.get_company_address() + '\n')
-                f.write(company.get_foundation_year() + '\n')
-                f.write('#' + '\n')
-
-                self.__success_image = tk.PhotoImage(file = '../Pictures/Icons/success.png')
-                self.__success = tk.Label(self.__window_add_company, borderwidth=0, highlightthickness=0, image = self.__success_image)
-                self.__success.place(x=1038, y=695)
-            
-                self.__window_add_company.after(3000, self.__success.destroy)
-        
-        elif (company_exists == True and
-            self.founder_name.get() != EMPTY and
-            self.founder_surname.get() != EMPTY and
-            self.company_name.get() != EMPTY and
-            self.company_address.get() != EMPTY and
-            self.tax_id.get() != EMPTY and
-            self.foundation_year.get() != EMPTY):
-
-            self.__already_exists_image = tk.PhotoImage(file = '../Pictures/Icons/already_exists.png')
-            self.__already_exists = tk.Label(self.__window_add_company, borderwidth=0, highlightthickness=0, image = self.__already_exists_image)
-            self.__already_exists.place(x=1038, y=695)
-        
-            self.__window_add_company.after(3000, self.__already_exists.destroy)
-
-        else:
-            self.__failed_image = tk.PhotoImage(file = '../Pictures/Icons/failed.png')
-            self.__failed = tk.Label(self.__window_add_company, borderwidth=0, highlightthickness=0, image = self.__failed_image)
-            self.__failed.place(x=1038, y=695)
-        
-            self.__window_add_company.after(3000, self.__failed.destroy)
-
-    def submit_delete_company(self):
-        EMPTY = ''
-        END_LINE_SYMBOL = '#'
-        found_company_to_delete = False
-        found_employee_to_delete = False
-        
-        company_exists, company = CompanyManagement.check_company_existence(self.tax_id.get())
-
-        if company_exists == True:
-            # REMOVE ALL EMPLOYEES FROM THE COMPANY [DATABASE]
-            with open('../Data/EmployeesData.txt', 'r') as f:
-                lines = f.readlines()
-                
-            with open('../Data/EmployeesData.txt', 'w') as f:
-                for line in lines:
-                    if line.strip("\n") == company.get_tax_id():
-                        found_employee_to_delete = True
-
-                    if line.strip("\n") == END_LINE_SYMBOL and found_employee_to_delete == True:
-                        found_employee_to_delete = False
-                    elif found_employee_to_delete == True:
-                        pass
-                    else:
-                        f.write(line)
-
-            # REMOVE ALL EMPLOYEES FROM THE COMPANY [PROGRAM]
-            for employee in CompanyManagement.employees_list:
-                if employee.get_company_tax_id() == company.get_tax_id():
-                    CompanyManagement.employees_list.remove(employee)
-
-            # DELETE THE COMPANY [DATABASE]
-            with open('../Data/CompaniesData.txt', 'r') as f:
-                lines = f.readlines()
-                
-            with open('../Data/CompaniesData.txt', 'w') as f:
-                for line in lines:
-                    if line.strip("\n") == company.get_tax_id():
-                        found_company_to_delete = True
-
-                    if line.strip("\n") == END_LINE_SYMBOL and found_company_to_delete == True:
-                        found_company_to_delete = False
-                    elif found_company_to_delete == True:
-                        pass
-                    else:
-                        f.write(line)    
-
-            # DELETE THE COMPANY [PROGRAM]
-            CompanyManagement.companies_list.remove(company)
-
-            self.__success_image = tk.PhotoImage(file = '../Pictures/Icons/success.png')
-            self.__success = tk.Label(self.__window_delete_company, borderwidth=0, highlightthickness=0, image = self.__success_image)
-            self.__success.place(x=1038, y=695)
-        
-            self.__window_delete_company.after(3000, self.__success.destroy)
-
-        else:
-            self.__failed_image = tk.PhotoImage(file = '../Pictures/Icons/failed.png')
-            self.__failed = tk.Label(self.__window_delete_company, borderwidth=0, highlightthickness=0, image = self.__failed_image)
-            self.__failed.place(x=1038, y=695)
-        
-            self.__window_delete_company.after(3000, self.__failed.destroy)
+#--------------------------- Submit Methods START ---------------------------#
 
     def submit_find_employee(self):
         EMPTY = ''
@@ -695,3 +551,5 @@ class SubPage(Page):
             self.__failed.place(x=1038, y=695)
         
             self.__window_find_employee.after(3000, self.__failed.destroy)
+
+#---------------------------- Submit Methods END ----------------------------#
