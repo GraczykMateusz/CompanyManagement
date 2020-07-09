@@ -188,9 +188,14 @@ class CompanyManagement:
                         f.write(line)
 
             # REMOVE ALL EMPLOYEES FROM THE COMPANY [PROGRAM]
+            emp_to_del_list = []
+
             for employee in CompanyManagement.employees_list:
                 if employee.get_company_tax_id() == company.get_tax_id():
-                    CompanyManagement.employees_list.remove(employee)
+                    emp_to_del_list.append(employee)
+
+            for emp_to_del in emp_to_del_list:
+                    CompanyManagement.employees_list.remove(emp_to_del)
 
             # DELETE THE COMPANY [DATABASE]
             with open('../Data/CompaniesData.txt', 'r') as f:
