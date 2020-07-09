@@ -4,6 +4,7 @@ from Company import Company
 from Employee import Employee
 from CompanyManagement import CompanyManagement
 
+
 class Server:
     '''
     The class is responsible for connecting to the server to download or send data.
@@ -18,7 +19,7 @@ class Server:
         cls, host_name=None, user_name=None,
         db=None, password=None
     ):
-        
+
         my_db = mysql.connector.connect(
             host=host_name,
             user=user_name,
@@ -41,23 +42,21 @@ class Server:
         )
 
         my_cursor = my_db.cursor()
-        
+
         create_new_companies_table = (
             "CREATE TABLE IF NOT EXISTS Companies "
             "(Tax_ID VARCHAR(255), Founder_Name VARCHAR(255), Founder_Surname VARCHAR(255), "
-            "Company_Name VARCHAR(255), Company_Address VARCHAR(255), Foundation_Year VARCHAR(255))"
-        )
-        
+            "Company_Name VARCHAR(255), Company_Address VARCHAR(255), Foundation_Year VARCHAR(255))")
+
         create_new_employees_table = (
             "CREATE TABLE IF NOT EXISTS Employees "
             "(Company_Tax_ID VARCHAR(255), Personal_ID VARCHAR(255), Name VARCHAR(255), "
             "Surname VARCHAR(255), Address VARCHAR(255), Birthday VARCHAR(255), "
-            "Salary VARCHAR(255))"
-        )
-        
+            "Salary VARCHAR(255))")
+
         my_cursor.execute(create_new_companies_table)
         my_cursor.execute(create_new_employees_table)
-        
+
         add_company_sql = (
             "INSERT INTO Companies "
             "(Tax_ID, Founder_Name, Founder_Surname, "
@@ -66,7 +65,7 @@ class Server:
             "(%(Tax_ID)s, %(Founder_Name)s, %(Founder_Surname)s, "
             "%(Company_Name)s,%(Company_Address)s, %(Foundation_Year)s)"
         )
-        
+
         add_employee_sql = (
             "INSERT INTO Employees "
             "(Company_Tax_ID, Personal_ID, Name, "
@@ -79,7 +78,7 @@ class Server:
         )
 
         for company in CompanyManagement.companies_list:
-            
+
             company = {
                 'Tax_ID': company.get_tax_id(),
                 'Founder_Name': company.get_founder_name(),
@@ -88,9 +87,9 @@ class Server:
                 'Company_Address': company.get_company_address(),
                 'Foundation_Year': company.get_foundation_year()
             }
-            
-            my_cursor.execute(add_company_sql, company)       
-        
+
+            my_cursor.execute(add_company_sql, company)
+
         for employee in CompanyManagement.employees_list:
 
             employee = {
@@ -108,7 +107,7 @@ class Server:
         my_db.commit()
 
         my_cursor.close()
-        
+
     @classmethod
     def submit_download_database(
         cls, host_name=None, user_name=None,
@@ -130,7 +129,7 @@ class Server:
         my_cursor.execute("SELECT * FROM Companies")
         result = my_cursor.fetchall()
 
-        #Delete data from txt
+        # Delete data from txt
         with open('../Data/CompaniesData.txt', 'w') as f:
             pass
 
@@ -150,8 +149,13 @@ class Server:
                     company_address = lines_arr[4]
                     foundation_year = lines_arr[5]
 
-                    company = Company(founder_name, founder_surname, company_name,
-                                      company_address, tax_id, foundation_year)
+                    company = Company(
+                        founder_name,
+                        founder_surname,
+                        company_name,
+                        company_address,
+                        tax_id,
+                        foundation_year)
                     CompanyManagement.companies_list.append(company)
 
                     with open('../Data/CompaniesData.txt', 'a') as f:
@@ -164,7 +168,6 @@ class Server:
                         f.write('#' + '\n')
 
                     lines_arr.clear()
-
 
         my_cursor.execute("SELECT * FROM Employees")
         result = my_cursor.fetchall()

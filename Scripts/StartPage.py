@@ -3,9 +3,10 @@ import tkinter as tk
 from Page import Page
 from SubPage import SubPage
 
+
 class StartPage(tk.Tk, Page):
     '''Create main window with all settings'''
-    tip = None 
+    tip = None
 
     def __init__(
         self, geometry="1200x800",
@@ -16,7 +17,7 @@ class StartPage(tk.Tk, Page):
 
         self.sub_window = SubPage()
 
-        #Image lists and image counters
+        # Image lists and image counters
         self.__emp_button_imgs = []
         self.__emp_buttons_counter = 0
 
@@ -26,12 +27,12 @@ class StartPage(tk.Tk, Page):
         self.__db_button_imgs = []
         self.__db_buttons_counter = 0
 
-        #Settings
+        # Settings
         self._set_window(geometry)
         self._add_background(background)
         self._add_window_icon(icon)
 
-        #Employee management buttons
+        # Employee management buttons
         self.add_employee_button(
             "../Pictures/Buttons/employee_add_button.png",
             490, self.sub_window.view_add_employee
@@ -49,7 +50,7 @@ class StartPage(tk.Tk, Page):
             670, self.sub_window.view_find_employee
         )
 
-        #Company management buttons
+        # Company management buttons
         self.add_company_button(
             "../Pictures/Buttons/company_add_button.png",
             490, self.sub_window.view_add_company
@@ -67,7 +68,7 @@ class StartPage(tk.Tk, Page):
             670, self.sub_window.view_find_company
         )
 
-        #Database management buttons
+        # Database management buttons
         self.add_database_button(
             "../Pictures/Buttons/database_download_button.png",
             490, self.sub_window.view_download_database
@@ -77,7 +78,7 @@ class StartPage(tk.Tk, Page):
             550, self.sub_window.view_send_database
         )
 
-        self.add_tip_button()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+        self.add_tip_button()
 
     def add_employee_button(self, button_img, position_y, event):
         position_x = 220
@@ -116,7 +117,7 @@ class StartPage(tk.Tk, Page):
         self.__db_buttons_counter += 1
 
     def add_tip_button(self):
-        StartPage.tip = tk.BooleanVar() 
+        StartPage.tip = tk.BooleanVar()
         StartPage.tip.set(True)
         self.sub_window.checks_tip(StartPage.tip.get())
 
@@ -135,5 +136,3 @@ class StartPage(tk.Tk, Page):
 
         self.__tip_button_on.place(x=1105, y=710)
         self.__tip_button_off.place(x=1105, y=731)
-
-
