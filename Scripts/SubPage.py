@@ -29,7 +29,10 @@ class SubPage(Page):
 
         self.__entry_list = []
 
-        self.is_complete = tk.StringVar()
+        self.comp_add_is_complete = tk.StringVar()
+        self.comp_del_is_complete = tk.StringVar()
+        self.emp_add_is_complete = tk.StringVar()
+        self.emp_del_is_complete = tk.StringVar()
 
     def checks_tip(self, tip):
         self.tip = tip
@@ -64,13 +67,13 @@ class SubPage(Page):
         )
         self.submit_button.place(x=1030, y=720)
 
-    def complete(self, window):
-        if self.is_complete.get() == "Success":
+    def complete(self, window, is_complete):
+        if is_complete.get() == "Success":
             self.__image = tk.PhotoImage(
                 file='../Pictures/Icons/success.png'
             )
 
-        elif self.is_complete.get() == "Failed":
+        elif is_complete.get() == "Failed":
             self.__image = tk.PhotoImage(
                 file='../Pictures/Icons/failed.png'
             )
@@ -124,7 +127,7 @@ class SubPage(Page):
         SubPage.submit_button(
             self.__window_add_company,
             lambda: CompanyManagement.add_company(
-                self.is_complete,
+                self.comp_add_is_complete,
                 self.founder_name.get(),
                 self.founder_surname.get(),
                 self.company_name.get(),
@@ -132,9 +135,9 @@ class SubPage(Page):
                 self.tax_id.get(),
                 self.foundation_year.get()))
 
-        self.is_complete.trace(
+        self.comp_add_is_complete.trace(
             'w', lambda var, indx, mode:
-            self.complete(self.__window_add_company)
+            self.complete(self.__window_add_company, self.comp_add_is_complete)
         )
 
     def view_delete_company(self):
@@ -159,13 +162,13 @@ class SubPage(Page):
         SubPage.submit_button(
             self.__window_delete_company,
             lambda: CompanyManagement.delete_company(
-                self.is_complete, self.tax_id.get()
+                self.comp_del_is_complete, self.tax_id.get()
             )
         )
 
-        self.is_complete.trace(
+        self.comp_del_is_complete.trace(
             'w', lambda var, indx, mode:
-            self.complete(self.__window_delete_company)
+            self.complete(self.__window_delete_company, self.comp_del_is_complete)
         )
 
     def view_list_company(self):
@@ -335,7 +338,7 @@ class SubPage(Page):
         SubPage.submit_button(
             self.__window_add_employee,
             lambda: CompanyManagement.add_employee(
-                self.is_complete,
+                self.emp_add_is_complete,
                 self.name.get(),
                 self.surname.get(),
                 self.personal_id.get(),
@@ -344,9 +347,9 @@ class SubPage(Page):
                 self.company_tax_id.get(),
                 self.salary.get()))
 
-        self.is_complete.trace(
+        self.emp_add_is_complete.trace(
             'w', lambda var, indx, mode:
-            self.complete(self.__window_add_employee)
+            self.complete(self.__window_add_employee, self.emp_add_is_complete)
         )
 
     def view_delete_employee(self):
@@ -373,13 +376,13 @@ class SubPage(Page):
         SubPage.submit_button(
             self.__window_delete_employee,
             lambda: CompanyManagement.delete_employee(
-                self.is_complete,
+                self.emp_del_is_complete,
                 self.company_tax_id.get(),
                 self.personal_id.get()))
 
-        self.is_complete.trace(
+        self.emp_del_is_complete.trace(
             'w', lambda var, indx, mode:
-            self.complete(self.__window_delete_employee)
+            self.complete(self.__window_delete_employee, self.emp_del_is_complete)
         )
 
     def view_list_employee(self):
