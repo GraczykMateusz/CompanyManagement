@@ -1,6 +1,6 @@
 # CompanyManagement
 Hello everyone!
-I would like to introduce to you my own 'CompanyManagement' project. I wrote this for two months and it finally finished. It was written in Python with the Tkinter library. We can use it, as the name suggests, to manage the companies and employees. All data will be sorted in a local database (txt file), but we can also send it to the server and ofcourse download from the server. More inforamtions and pictures you can see below:
+I would like to introduce to you my own 'CompanyManagement' project. I wrote this for two months and it finally finished. It was written in Python with the Tkinter library. We can use it, as the name suggests, to manage the companies and employees. All data will be sorted in a local database (txt file), but we can also send it to the server and of course download from the server. More inforamtions and pictures you can see below:
 
 *MENU*
 - Here we have all the ways to manage our companies.
