@@ -2,6 +2,7 @@ import mysql.connector
 
 from CompanyManagement import CompanyManagement
 
+
 class Server:
     '''
     The class is responsible for connecting to the server to download or send data.
@@ -18,9 +19,9 @@ class Server:
     ):
         try:
             my_db = mysql.connector.connect(
-            host=host_name,
-            user=user_name,
-            passwd=password)
+                host=host_name,
+                user=user_name,
+                passwd=password)
 
             my_cursor = my_db.cursor()
 
@@ -116,11 +117,11 @@ class Server:
     ):
         try:
             my_db = mysql.connector.connect(
-            host=host_name,
-            user=user_name,
-            passwd=password,
-            database=db)
-            
+                host=host_name,
+                user=user_name,
+                passwd=password,
+                database=db)
+
             my_cursor = my_db.cursor()
 
             CompanyManagement.companies_list.clear()

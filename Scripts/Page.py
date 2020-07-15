@@ -1,9 +1,11 @@
 import tkinter as tk
 
+
 class Page:
     '''
     The StartPage and SubPage classes inherit from the Page class
     '''
+
     def _set_window(self, geometry):
         self.geometry(geometry)
         self.resizable(width=False, height=False)

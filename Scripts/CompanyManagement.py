@@ -1,6 +1,7 @@
 from Company import Company
 from Employee import Employee
 
+
 class CompanyManagement:
     '''
     CompanyManagement class is responsible for manages companies and
@@ -194,7 +195,7 @@ class CompanyManagement:
                     emp_to_del_list.append(employee)
 
             for emp_to_del in emp_to_del_list:
-                    CompanyManagement.employees_list.remove(emp_to_del)
+                CompanyManagement.employees_list.remove(emp_to_del)
 
             # DELETE THE COMPANY [DATABASE]
             with open('../Data/CompaniesData.txt', 'r') as f:
@@ -234,15 +235,15 @@ class CompanyManagement:
             personal_id, company_tax_id)
 
         if (company_exists and
-                employee_exists == False and
-                name != EMPTY and
-                surname != EMPTY and
-                personal_id != EMPTY and
-                address != EMPTY and
-                birthday != EMPTY and
-                company_tax_id != EMPTY and
-                salary != EMPTY
-            ):
+                    employee_exists == False and
+                    name != EMPTY and
+                    surname != EMPTY and
+                    personal_id != EMPTY and
+                    address != EMPTY and
+                    birthday != EMPTY and
+                    company_tax_id != EMPTY and
+                    salary != EMPTY
+                ):
 
             with open('../Data/EmployeesData.txt', 'a') as f:
 
