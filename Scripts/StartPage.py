@@ -5,7 +5,9 @@ from SubPage import SubPage
 
 
 class StartPage(tk.Tk, Page):
-    '''Create main window with all settings'''
+    '''
+    Create main window with all settings
+    '''
     tip = None
 
     def __init__(

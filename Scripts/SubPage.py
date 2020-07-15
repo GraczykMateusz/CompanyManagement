@@ -7,9 +7,10 @@ from Employee import Employee
 from CompanyManagement import CompanyManagement
 from Server import Server
 
-
 class SubPage(Page):
-
+    '''
+    The SubPage class is responsible for subwindows display
+    '''
     def __init__(self, geometry="1175x775"):
 
         self.__geometry = geometry

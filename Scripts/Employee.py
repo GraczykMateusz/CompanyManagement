@@ -1,6 +1,7 @@
 class Employee:
-    '''Create an employee object with data'''
-
+    '''
+    Create an employee object with data
+    '''
     def __init__(
         self, name, surname,
         personal_id, address, birthday,

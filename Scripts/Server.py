@@ -4,7 +4,6 @@ from Company import Company
 from Employee import Employee
 from CompanyManagement import CompanyManagement
 
-
 class Server:
     '''
     The class is responsible for connecting to the server to download or send data.

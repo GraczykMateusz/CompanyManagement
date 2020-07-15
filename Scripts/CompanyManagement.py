@@ -1,7 +1,6 @@
 from Company import Company
 from Employee import Employee
 
-
 class CompanyManagement:
     '''
     CompanyManagement class is responsible for manages companies and

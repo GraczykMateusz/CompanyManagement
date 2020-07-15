@@ -1,6 +1,7 @@
 class Company:
-    '''Create a company object with data'''
-
+    '''
+    Create a company object with data
+    '''
     def __init__(
         self, founder_name, founder_surname,
         company_name, company_address, tax_id,
