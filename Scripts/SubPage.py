@@ -15,6 +15,8 @@ class SubPage(Page):
 
         self.__geometry = geometry
 
+        self.__entry_list = []
+
         self.__window_add_company = None
         self.__window_delete_company = None
         self.__window_find_company = None
@@ -28,12 +30,14 @@ class SubPage(Page):
         self.__window_download_database = None
         self.__window_send_database = None
 
-        self.__entry_list = []
-
         self.comp_add_is_complete = tk.StringVar()
         self.comp_del_is_complete = tk.StringVar()
+        
         self.emp_add_is_complete = tk.StringVar()
         self.emp_del_is_complete = tk.StringVar()
+
+        self.server_download_is_complete = tk.StringVar()
+        self.server_send_is_complete = tk.StringVar()
 
     def checks_tip(self, tip):
         self.tip = tip
@@ -549,10 +553,16 @@ class SubPage(Page):
         SubPage.submit_button(
             self.__window_send_database,
             lambda: Server.submit_send_database(
+                self.server_send_is_complete,
                 self.host.get(),
                 self.user.get(),
                 self.database.get(),
                 self.password.get()))
+
+        self.server_send_is_complete.trace(
+            'w', lambda var, indx, mode:
+            self.complete(self.__window_send_database, self.server_send_is_complete)
+        )
 
     def view_download_database(self):
         self.__window_download_database = self.check_window_existence(
@@ -582,10 +592,16 @@ class SubPage(Page):
         SubPage.submit_button(
             self.__window_download_database,
             lambda: Server.submit_download_database(
+                self.server_download_is_complete,
                 self.host.get(),
                 self.user.get(),
                 self.database.get(),
                 self.password.get()))
+        
+        self.server_download_is_complete.trace(
+            'w', lambda var, indx, mode:
+            self.complete(self.__window_download_database, self.server_download_is_complete)
+        )
 
 #----------------------------- View Methods END -----------------------------#
 
