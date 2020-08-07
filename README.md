@@ -47,6 +47,8 @@ I would like to introduce to you my own 'CompanyManagement' project. I wrote thi
 - Total number of employees
 - The same is for companies.
 
+![](Pictures/Introduction/employee_list.png)
+
 --------------------------------------------------------------------------------------------------------------------
 
 *FIND EMPLOYEE*
