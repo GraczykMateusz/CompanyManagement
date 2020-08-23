@@ -10,7 +10,7 @@ class Server:
     host="localhost",
     user="root",
     passwd="123",
-    database="Company_Managment_Database"
+    database="Company_Management_Database"
     '''
     @classmethod
     def submit_send_database(

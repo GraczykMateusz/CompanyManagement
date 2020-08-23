@@ -16,7 +16,7 @@ I would like to introduce to you my own 'CompanyManagement' project. I wrote thi
 - In one company can be only one employee with the same Personal ID.
 - One employee can work in several companies.
 - All spaces must be not empty.
-- Success/Allready Exists/Failed only takes a couple of seconds.
+- Success/Already Exists/Failed only takes a couple of seconds.
 - Tip works
 
 ![](Pictures/Introduction/employee_add_success.png)
